@@ -1,0 +1,392 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+  --bg: #0b0c0e;
+  --bg-soft: #131418;
+  --bg-soft-2: #181a1f;
+  --border: #22242a;
+  --text: #eceae4;
+  --text-dim: #8b8d94;
+  --accent: #7fe0c4;
+
+  --tile-wall: #3a3d44;
+  --tile-floor: #45484f;
+  --tile-stairs: #dbe9ff;
+  --tile-player: #b6fff0;
+
+  --mon-t1: #7fd992;
+  --mon-t2: #e8c15c;
+  --mon-t3: #ff9f43;
+  --mon-t4: #ff5c5c;
+  --mon-final: #ff6bd6;
+
+  --item-gold: #f5d76e;
+  --item-potion: #ff6b81;
+  --item-food: #c98a4b;
+  --item-scroll: #7ec8e3;
+  --item-weapon: #6fa8dc;
+  --item-armor: #4f83cc;
+  --item-ring: #4dd0e1;
+  --item-treasure: #ffd700;
+
+  --hp-color: #ff6b6b;
+  --exp-color: #7fe0c4;
+  --hunger-color: #e8c15c;
+}
+
+* {
+  box-sizing: border-box;
+}
+html, body {
+  margin: 0;
+  padding: 0;
+}
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Noto Sans JP', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+a {
+  color: var(--accent);
+}
+h1, h2 {
+  margin: 0;
+}
+button {
+  font-family: inherit;
+}
+
+/* レイアウト */
+.app-shell {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 28px 24px 60px;
+}
+.app-header {
+  margin-bottom: 20px;
+}
+.app-header h1 {
+  font-size: clamp(26px, 4vw, 36px);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, #fff 0%, var(--accent) 130%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.subtitle {
+  margin: 6px 0 0;
+  color: var(--text-dim);
+  font-size: 14px;
+}
+.main-layout {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 20px;
+  align-items: start;
+}
+.side-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.panel-block {
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 18px;
+}
+.panel-block h2 {
+  font: 600 12px/1 'JetBrains Mono', monospace;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 12px;
+}
+.app-footer {
+  text-align: center;
+  margin-top: 32px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  font: 400 12px/1 'JetBrains Mono', monospace;
+  color: var(--text-dim);
+}
+.app-footer .sep {
+  margin: 0 8px;
+}
+
+/* ダンジョングリッド */
+.dungeon-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.dungeon-viewport {
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  height: min(58vh, 520px);
+  overflow: auto;
+  padding: 12px;
+}
+.dungeon-grid {
+  display: grid;
+  grid-template-columns: repeat(78, 1.15em);
+  grid-auto-rows: 1.3em;
+  font-family: 'Noto Sans JP', monospace;
+  font-size: 16px;
+  width: max-content;
+}
+.tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+.tile-unseen {
+  color: transparent;
+}
+.tile-wall {
+  color: var(--tile-wall);
+}
+.tile-floor {
+  color: var(--tile-floor);
+  font-size: 0.5em;
+}
+.tile-stairs {
+  color: var(--tile-stairs);
+  font-weight: 700;
+}
+.tile-player {
+  color: var(--tile-player);
+  font-weight: 700;
+  text-shadow: 0 0 8px rgba(182, 255, 240, 0.6);
+}
+.tile-dim {
+  opacity: 0.42;
+  filter: saturate(0.7);
+}
+.tile-monster.mon-t1 { color: var(--mon-t1); }
+.tile-monster.mon-t2 { color: var(--mon-t2); }
+.tile-monster.mon-t3 { color: var(--mon-t3); }
+.tile-monster.mon-t4 { color: var(--mon-t4); }
+.tile-monster.mon-final {
+  color: var(--mon-final);
+  font-weight: 700;
+  text-shadow: 0 0 10px rgba(255, 107, 214, 0.8);
+}
+.tile-item.item-gold { color: var(--item-gold); }
+.tile-item.item-potion { color: var(--item-potion); }
+.tile-item.item-food { color: var(--item-food); }
+.tile-item.item-scroll { color: var(--item-scroll); }
+.tile-item.item-weapon { color: var(--item-weapon); }
+.tile-item.item-armor { color: var(--item-armor); }
+.tile-item.item-ring { color: var(--item-ring); }
+.tile-item.item-treasure {
+  color: var(--item-treasure);
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.7);
+}
+
+/* HUD */
+.stat-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  padding: 4px 0;
+}
+.stat-label {
+  color: var(--text-dim);
+  width: 4.5em;
+  flex-shrink: 0;
+}
+.stat-value {
+  font-family: 'JetBrains Mono', monospace;
+  margin-left: auto;
+  text-align: right;
+}
+.bar {
+  display: inline-block;
+  width: 84px;
+  height: 8px;
+  background: var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.bar-fill {
+  display: block;
+  height: 100%;
+  width: 0%;
+  transition: width 0.25s ease;
+}
+.hp-bar .bar-fill { background: var(--hp-color); }
+.exp-bar .bar-fill { background: var(--exp-color); }
+.hunger-bar .bar-fill { background: var(--hunger-color); }
+
+/* メッセージログ */
+.message-panel {
+  flex: 1;
+  min-height: 0;
+}
+.message-log {
+  height: 220px;
+  overflow-y: auto;
+  font: 400 12.5px/1.6 'JetBrains Mono', monospace;
+  color: var(--text-dim);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.log-entry {
+  padding: 2px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+.log-entry:last-child {
+  color: var(--text);
+}
+
+/* 凡例 */
+.legend-panel summary {
+  cursor: pointer;
+  font: 600 12px/1 'JetBrains Mono', monospace;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  outline: none;
+}
+.legend-list {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.legend-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.legend-caption {
+  margin: 0 0 2px;
+  font-size: 11px;
+  color: var(--text-dim);
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+}
+.legend-item span:first-child {
+  font-size: 16px;
+  min-width: 3.4em;
+  letter-spacing: 0.15em;
+  text-align: center;
+}
+
+/* 操作パネル */
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.btn {
+  background: var(--bg-soft-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 13px;
+  cursor: pointer;
+  min-height: 44px;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.btn:hover {
+  background: #1f2127;
+  border-color: var(--accent);
+}
+.btn-danger {
+  color: #ff8080;
+  border-color: rgba(255, 107, 107, 0.35);
+}
+.btn-danger:hover {
+  border-color: #ff6b6b;
+}
+
+/* オーバーレイ(クリア/訃報) */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 6, 8, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  padding: 24px;
+}
+.overlay.hidden {
+  display: none;
+}
+.overlay-content {
+  max-width: 520px;
+  width: 100%;
+  text-align: center;
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 40px 32px;
+}
+.overlay[data-variant="clear"] .overlay-content {
+  border-color: rgba(127, 224, 196, 0.4);
+}
+.overlay[data-variant="death"] .overlay-content {
+  border-color: rgba(255, 107, 107, 0.3);
+}
+#overlay-title {
+  font-size: 30px;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+.overlay-subtitle {
+  color: var(--text-dim);
+  margin: 0 0 20px;
+}
+.overlay-body {
+  font: 400 14px/2 'JetBrains Mono', monospace;
+  color: var(--text);
+  margin-bottom: 28px;
+}
+.overlay-body p {
+  margin: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .main-layout {
+    grid-template-columns: 1fr;
+  }
+  .dungeon-viewport {
+    height: 46vh;
+  }
+}
+
+@media (max-width: 520px) {
+  .app-shell {
+    padding: 18px 14px 40px;
+  }
+  .stat-label {
+    width: 3.6em;
+  }
+  .bar {
+    width: 60px;
+  }
+}
