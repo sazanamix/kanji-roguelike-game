@@ -60,7 +60,7 @@ button {
 
 /* レイアウト */
 .app-shell {
-  max-width: 1440px;
+  max-width: 1680px;
   margin: 0 auto;
   padding: 28px 24px 60px;
 }
@@ -128,17 +128,19 @@ button {
   background: var(--bg-soft);
   border: 1px solid var(--border);
   border-radius: 12px;
-  height: min(58vh, 520px);
   overflow: auto;
   padding: 12px;
   min-width: 0;
+  container-type: inline-size;
 }
 .dungeon-grid {
   display: grid;
-  grid-template-columns: repeat(78, 1.15em);
-  grid-auto-rows: 1.3em;
+  grid-template-columns: repeat(78, 1.1em);
+  grid-auto-rows: 1.2em;
   font-family: 'Noto Sans JP', monospace;
-  font-size: 16px;
+  /* 78列(×1.1em)がビューポート幅にちょうど収まるフォントサイズを算出し、
+     画面が狭くて最小サイズを下回る場合のみビューポート側のスクロールに委ねる */
+  font-size: clamp(12px, calc(100cqw / 87), 18px);
   width: max-content;
 }
 .tile {
@@ -375,9 +377,6 @@ button {
 @media (max-width: 900px) {
   .main-layout {
     grid-template-columns: 1fr;
-  }
-  .dungeon-viewport {
-    height: 46vh;
   }
 }
 
