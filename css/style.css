@@ -122,6 +122,7 @@ button {
   display: flex;
   flex-direction: column;
   gap: 14px;
+  min-width: 0;
 }
 .dungeon-viewport {
   background: var(--bg-soft);
@@ -130,6 +131,7 @@ button {
   height: min(58vh, 520px);
   overflow: auto;
   padding: 12px;
+  min-width: 0;
 }
 .dungeon-grid {
   display: grid;
