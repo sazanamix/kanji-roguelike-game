@@ -46,7 +46,8 @@ body {
   color: var(--text);
   font-family: 'Noto Sans JP', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
 }
 a {
   color: var(--accent);
@@ -62,10 +63,14 @@ button {
 .app-shell {
   max-width: 1680px;
   margin: 0 auto;
-  padding: 28px 24px 60px;
+  padding: 20px 24px 16px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 .app-header {
-  margin-bottom: 20px;
+  margin-bottom: 14px;
+  flex-shrink: 0;
 }
 .app-header h1 {
   font-size: clamp(26px, 4vw, 36px);
@@ -85,18 +90,22 @@ button {
   display: grid;
   grid-template-columns: 1fr 380px;
   gap: 20px;
-  align-items: start;
+  align-items: stretch;
+  flex: 1;
+  min-height: 0;
 }
 .side-panel {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  min-height: 0;
 }
 .panel-block {
   background: var(--bg-soft);
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 16px 18px;
+  flex-shrink: 0;
 }
 .panel-block h2 {
   font: 600 12px/1 'JetBrains Mono', monospace;
@@ -107,11 +116,12 @@ button {
 }
 .app-footer {
   text-align: center;
-  margin-top: 32px;
-  padding-top: 20px;
+  margin-top: 12px;
+  padding-top: 10px;
   border-top: 1px solid var(--border);
   font: 400 12px/1 'JetBrains Mono', monospace;
   color: var(--text-dim);
+  flex-shrink: 0;
 }
 .app-footer .sep {
   margin: 0 8px;
@@ -123,6 +133,7 @@ button {
   flex-direction: column;
   gap: 14px;
   min-width: 0;
+  min-height: 0;
 }
 .dungeon-viewport {
   background: var(--bg-soft);
@@ -131,17 +142,23 @@ button {
   overflow: auto;
   padding: 12px;
   min-width: 0;
-  container-type: inline-size;
+  min-height: 0;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  container-type: size;
 }
 .dungeon-grid {
   display: grid;
   grid-template-columns: repeat(78, 1.1em);
   grid-auto-rows: 1.2em;
   font-family: 'Noto Sans JP', monospace;
-  /* 78列(×1.1em)がビューポート幅にちょうど収まるフォントサイズを算出し、
-     画面が狭くて最小サイズを下回る場合のみビューポート側のスクロールに委ねる */
-  font-size: clamp(12px, calc(100cqw / 87), 18px);
+  /* 78列(×1.1em)・24行(×1.2em)がビューポートの幅/高さ双方に収まるフォントサイズを
+     算出し、画面が狭くて最小サイズを下回る場合のみビューポート側のスクロールに委ねる */
+  font-size: clamp(12px, min(calc(100cqw / 87), calc(100cqh / 29.5)), 18px);
   width: max-content;
+  flex-shrink: 0;
 }
 .tile {
   display: flex;
@@ -234,9 +251,12 @@ button {
 .message-panel {
   flex: 1;
   min-height: 0;
+  display: flex;
+  flex-direction: column;
 }
 .message-log {
-  height: 220px;
+  flex: 1;
+  min-height: 60px;
   overflow-y: auto;
   font: 400 12.5px/1.6 'JetBrains Mono', monospace;
   color: var(--text-dim);
@@ -295,6 +315,7 @@ button {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+  flex-shrink: 0;
 }
 .btn {
   background: var(--bg-soft-2);
@@ -375,8 +396,33 @@ button {
 }
 
 @media (max-width: 900px) {
+  /* 縦積みレイアウトでは「1画面に収める」より通常のページスクロールの方が自然なため、
+     幅方向のみでグリッドを合わせ、高さは内容に応じて伸びる通常の流れに戻す */
+  body {
+    height: auto;
+    overflow: visible;
+  }
+  .app-shell {
+    height: auto;
+  }
   .main-layout {
     grid-template-columns: 1fr;
+    flex: none;
+    min-height: 0;
+  }
+  .dungeon-viewport {
+    flex: none;
+    container-type: inline-size;
+  }
+  .dungeon-grid {
+    font-size: clamp(12px, calc(100cqw / 87), 20px);
+  }
+  .message-panel {
+    flex: none;
+  }
+  .message-log {
+    flex: none;
+    height: 220px;
   }
 }
 
