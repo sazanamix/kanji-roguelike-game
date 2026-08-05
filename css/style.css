@@ -69,8 +69,16 @@ button {
   flex-direction: column;
 }
 .app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
   margin-bottom: 14px;
   flex-shrink: 0;
+}
+.app-title-group {
+  min-width: 0;
 }
 .app-header h1 {
   font-size: clamp(26px, 4vw, 36px);
@@ -289,17 +297,19 @@ button {
   min-height: 0;
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: center;
+  gap: 12px;
 }
 .equipment-slot {
   display: flex;
   align-items: center;
-  gap: 18px;
+  gap: 14px;
 }
 .equipment-kanji {
-  font-size: clamp(32px, 4vw, 48px);
+  font-size: 24px;
+  line-height: 1;
   font-weight: 700;
-  width: 1.3em;
+  width: 1.4em;
   flex-shrink: 0;
   text-align: center;
   color: var(--text-dim);
@@ -343,7 +353,7 @@ button {
 .hall-of-fame-list {
   flex: 1;
   min-height: 60px;
-  overflow-y: auto;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -461,6 +471,10 @@ button {
   .app-shell {
     height: auto;
   }
+  .app-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
   .main-layout {
     grid-template-columns: 1fr;
     grid-template-rows: none;
@@ -489,8 +503,8 @@ button {
     flex: none;
   }
   .hall-of-fame-list {
-    max-height: none;
-    overflow-y: visible;
+    flex: none;
+    overflow: visible;
   }
 }
 

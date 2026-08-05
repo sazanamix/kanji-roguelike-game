@@ -12,19 +12,21 @@
 <div class="app-shell">
 
   <header class="app-header">
-    <h1>漢字ローグ</h1>
-    <p class="subtitle">全自動探索シミュレーション ― 迷宮99階への挑戦</p>
+    <div class="app-title-group">
+      <h1>漢字ローグ</h1>
+      <p class="subtitle">全自動探索シミュレーション ― 迷宮99階への挑戦</p>
+    </div>
+    <div class="controls" id="controls">
+      <button type="button" id="btn-pause" class="btn">一時停止</button>
+      <button type="button" id="btn-speed" class="btn">速度 x1</button>
+      <button type="button" id="btn-save" class="btn">セーブ</button>
+      <button type="button" id="btn-load" class="btn">ロード</button>
+      <button type="button" id="btn-reset" class="btn btn-danger">リセット</button>
+    </div>
   </header>
 
   <main class="main-layout">
     <section class="dungeon-panel">
-      <div class="controls" id="controls">
-        <button type="button" id="btn-pause" class="btn">一時停止</button>
-        <button type="button" id="btn-speed" class="btn">速度 x1</button>
-        <button type="button" id="btn-save" class="btn">セーブ</button>
-        <button type="button" id="btn-load" class="btn">ロード</button>
-        <button type="button" id="btn-reset" class="btn btn-danger">リセット</button>
-      </div>
       <div class="dungeon-viewport" id="dungeon-viewport">
         <div class="dungeon-grid" id="dungeon-grid" aria-hidden="true"></div>
       </div>
