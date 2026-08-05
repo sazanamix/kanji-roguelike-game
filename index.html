@@ -26,17 +26,11 @@
   </header>
 
   <main class="main-layout">
-    <section class="dungeon-panel">
-      <div class="dungeon-viewport" id="dungeon-viewport">
-        <div class="dungeon-grid" id="dungeon-grid" aria-hidden="true"></div>
-      </div>
-      <section class="panel-block message-panel" aria-label="冒険の記録">
-        <h2>冒険の記録</h2>
-        <div class="message-log" id="message-log"></div>
-      </section>
-    </section>
+    <div class="dungeon-viewport" id="dungeon-viewport">
+      <div class="dungeon-grid" id="dungeon-grid" aria-hidden="true"></div>
+    </div>
 
-    <aside class="side-panel">
+    <div class="side-top">
       <section class="panel-block" aria-label="ステータス">
         <h2>ステータス</h2>
         <div class="stat-row"><span class="stat-label">階層</span><span id="stat-floor" class="stat-value">1 / 99</span></div>
@@ -61,28 +55,29 @@
         </div>
         <div class="stat-row"><span class="stat-label">所持金</span><span id="stat-gold" class="stat-value">0</span></div>
         <div class="stat-row"><span class="stat-label">撃破数</span><span id="stat-kills" class="stat-value">0</span></div>
-      </section>
-
-      <section class="panel-block" aria-label="記録">
-        <h2>記録</h2>
-        <div class="stat-row"><span class="stat-label">最高到達階</span><span id="stat-best-floor" class="stat-value">0</span></div>
-        <div class="stat-row"><span class="stat-label">総冒険回数</span><span id="stat-total-runs" class="stat-value">0</span></div>
-        <div class="stat-row"><span class="stat-label">総クリア回数</span><span id="stat-total-clears" class="stat-value">0</span></div>
-      </section>
-
-      <section class="panel-block" aria-label="装備">
-        <h2>装備</h2>
         <div class="stat-row"><span class="stat-label">武器</span><span id="equip-weapon-value" class="stat-value">なし</span></div>
         <div class="stat-row"><span class="stat-label">防具</span><span id="equip-armor-value" class="stat-value">なし</span></div>
         <div class="stat-row"><span class="stat-label">指輪</span><span id="equip-ring-value" class="stat-value">なし</span></div>
         <div class="stat-row"><span class="stat-label">所持品</span><span id="equip-inventory-value" class="stat-value">薬×0  巻×0  飯×0</span></div>
       </section>
 
-      <section class="panel-block hall-of-fame-panel" aria-label="殿堂">
-        <h2>殿堂</h2>
-        <div class="hall-of-fame-list" id="hall-of-fame-list"></div>
+      <section class="panel-block records-panel" aria-label="記録">
+        <h2>記録</h2>
+        <div class="stat-row"><span class="stat-label">最高到達階</span><span id="stat-best-floor" class="stat-value">0</span></div>
+        <div class="stat-row"><span class="stat-label">総冒険回数</span><span id="stat-total-runs" class="stat-value">0</span></div>
+        <div class="stat-row"><span class="stat-label">総クリア回数</span><span id="stat-total-clears" class="stat-value">0</span></div>
       </section>
-    </aside>
+    </div>
+
+    <section class="panel-block message-panel" aria-label="冒険の記録">
+      <h2>冒険の記録</h2>
+      <div class="message-log" id="message-log"></div>
+    </section>
+
+    <section class="panel-block hall-of-fame-panel" aria-label="殿堂">
+      <h2>殿堂</h2>
+      <div class="hall-of-fame-list" id="hall-of-fame-list"></div>
+    </section>
   </main>
 
   <footer class="app-footer">

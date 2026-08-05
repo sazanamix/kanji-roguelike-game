@@ -94,21 +94,30 @@ button {
   color: var(--text-dim);
   font-size: 14px;
 }
+/* 迷宮とステータス+記録を同じ行、冒険の記録と殿堂をもう一方の行に置くことで、
+   迷宮の下端と記録の下端(行の高さ)がそろうことを構造的に保証する */
 .main-layout {
   display: grid;
   grid-template-columns: 1fr 380px;
-  grid-template-rows: 1fr;
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+    "viewport sidetop"
+    "log      hof";
   gap: 20px;
-  align-items: stretch;
   flex: 1;
   min-height: 0;
 }
-.side-panel {
+.side-top {
+  grid-area: sidetop;
   display: flex;
   flex-direction: column;
   gap: 12px;
   min-height: 0;
   overflow-y: auto;
+}
+.records-panel {
+  flex: 1;
+  min-height: 0;
 }
 .panel-block {
   background: var(--bg-soft);
@@ -138,21 +147,15 @@ button {
 }
 
 /* ダンジョングリッド */
-.dungeon-panel {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  min-width: 0;
-  min-height: 0;
-}
 .dungeon-viewport {
+  grid-area: viewport;
   background: var(--bg-soft);
   border: 1px solid var(--border);
   border-radius: 12px;
   overflow: auto;
   padding: 12px;
   min-width: 0;
-  flex-shrink: 0;
+  min-height: 0;
   container-type: inline-size;
 }
 .dungeon-grid {
@@ -255,8 +258,9 @@ button {
 
 /* 冒険の記録 */
 .message-panel {
-  flex: 1;
+  grid-area: log;
   min-height: 0;
+  min-width: 0;
   display: flex;
   flex-direction: column;
 }
@@ -280,7 +284,7 @@ button {
 
 /* 殿堂(過去の冒険の記録一覧) */
 .hall-of-fame-panel {
-  flex: 1;
+  grid-area: hof;
   min-height: 0;
   display: flex;
   flex-direction: column;
@@ -423,19 +427,21 @@ button {
   }
   .main-layout {
     grid-template-columns: 1fr;
-    grid-template-rows: none;
+    grid-template-rows: auto;
+    grid-template-areas:
+      "viewport"
+      "log"
+      "sidetop"
+      "hof";
     flex: none;
     min-height: 0;
   }
-  .message-panel {
+  .records-panel {
     flex: none;
   }
   .message-log {
     flex: none;
     height: 220px;
-  }
-  .hall-of-fame-panel {
-    flex: none;
   }
   .hall-of-fame-list {
     flex: none;
