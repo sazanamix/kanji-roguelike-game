@@ -4,6 +4,7 @@ import {
   HUNGER_DRAIN_PER_TURN,
   HUNGER_STARVE_DAMAGE,
   MONSTER_DETECTION_RADIUS,
+  ELITE_FLOOR_INTERVAL,
   VISIBILITY,
 } from './constants.js';
 import { generateFloor, isWalkableTile } from './dungeon.js';
@@ -11,6 +12,7 @@ import { createDungeonRng } from './rng.js';
 import { createVisibility, updateVisibility, revealAllTerrain } from './fov.js';
 import {
   createMonster,
+  createEliteMonster,
   createFinalBoss,
   createItem,
   monsterCountForFloor,
@@ -29,7 +31,9 @@ function shuffleInPlace(arr, rng) {
   }
 }
 
-function findBossPosition(dungeon, rng) {
+// ボス/精鋭の出現位置決め: 階段からの距離が3〜6マスの地点を候補にすることで、
+// 入り口の目の前で即遭遇したり、階段の真上に居座って詰みになったりしないようにする。
+function findNotablePosition(dungeon, rng) {
   const walkable = (x, y) => isWalkableTile(dungeon, x, y);
   const dist = floodFillDistances(dungeon.width, dungeon.height, walkable, dungeon.stairsPos);
   const candidates = [];
@@ -120,8 +124,13 @@ export function enterFloor(state, floorNumber, log) {
 
   if (floorNumber === MAX_FLOOR) {
     const boss = createFinalBoss(`m${nextId++}`);
-    boss.pos = findBossPosition(dungeon, state.gameplayRng) || { ...dungeon.stairsPos };
+    boss.pos = findNotablePosition(dungeon, state.gameplayRng) || { ...dungeon.stairsPos };
     state.monsters.push(boss);
+  } else if (floorNumber % ELITE_FLOOR_INTERVAL === 0) {
+    // 一定階層ごとに、後半でも気が抜けないよう精鋭個体を1体追加で配置する。
+    const elite = createEliteMonster(floorNumber, state.gameplayRng, `m${nextId++}`);
+    elite.pos = findNotablePosition(dungeon, state.gameplayRng) || { ...dungeon.stairsPos };
+    state.monsters.push(elite);
   }
 
   updateVisibility(state.visibility, dungeon, state.player.pos);

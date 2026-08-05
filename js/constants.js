@@ -51,6 +51,17 @@ export const STARTING_STATS = Object.freeze({
   gold: 0,
   hunger: HUNGER_MAX,
 });
+// 序盤(レベル1・所持金/薬0)は事故死しやすいための緩和策として、薬を1つ持たせておく。
+export const STARTING_POTIONS = 1;
+
+// 一定階層ごとに出現する「精鋭」個体(同tierの通常モンスターを強化しただけで、
+// 見た目の漢字・色はそのtierのものを流用し、光彩と太字だけで格上を示す)。
+// 99階は専用の最強個体「神」が別途出現するため対象外(下記の判定は自然に除外される)。
+export const ELITE_FLOOR_INTERVAL = 10;
+export const ELITE_HP_MULT = 2.2;
+export const ELITE_ATK_MULT = 1.6;
+export const ELITE_DEF_MULT = 1.4;
+export const ELITE_EXP_MULT = 3;
 
 // ログ・記録の上限(無限稼働を前提とするため必須)
 export const MESSAGE_LOG_MAX = 200;

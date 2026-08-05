@@ -211,6 +211,12 @@ button {
   font-weight: 700;
   text-shadow: 0 0 10px rgba(255, 107, 214, 0.8);
 }
+/* 精鋭個体: そのtierの色はそのままに、光彩と太字だけで格上であることを示す
+   (漢字・色はtierを流用するため「全て漢字1文字」の凡例を増やさずに済む) */
+.tile-monster.mon-elite {
+  font-weight: 700;
+  text-shadow: 0 0 8px rgba(255, 176, 59, 0.8);
+}
 .tile-item.item-gold { color: var(--item-gold); }
 .tile-item.item-potion { color: var(--item-potion); }
 .tile-item.item-food { color: var(--item-food); }

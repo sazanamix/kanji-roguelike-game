@@ -35,9 +35,13 @@ export function grantExp(player, exp) {
   while (player.exp >= player.expToNext) {
     player.exp -= player.expToNext;
     player.level += 1;
-    player.maxHp += 6 + Math.floor(player.level / 3);
+    // レベル30まではバランス実績のある従来通りの伸び(HP加速=level/3、DEF毎レベル+1)を
+    // 保ち、それ以降だけ伸びを緩めることで、後半にレベルが乗るほど一方的に無敵化していく
+    // スノーボールだけを抑える(中盤の生存率を巻き添えにしない)。ATKは終始据え置き。
+    const hpAccel = player.level <= 30 ? Math.floor(player.level / 3) : 10 + Math.floor((player.level - 30) / 6);
+    player.maxHp += 6 + hpAccel;
     player.atk += 2;
-    player.def += 1;
+    if (player.level <= 30 || player.level % 2 === 0) player.def += 1;
     player.hp = player.maxHp;
     player.expToNext = expThreshold(player.level);
     levelsGained.push(player.level);

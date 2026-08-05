@@ -1,4 +1,13 @@
-import { STARTING_STATS, HUNGER_MAX, clamp } from './constants.js';
+import {
+  STARTING_STATS,
+  STARTING_POTIONS,
+  HUNGER_MAX,
+  ELITE_HP_MULT,
+  ELITE_ATK_MULT,
+  ELITE_DEF_MULT,
+  ELITE_EXP_MULT,
+  clamp,
+} from './constants.js';
 import { expThreshold } from './combat.js';
 
 export const PLAYER_KANJI = '勇';
@@ -76,11 +85,23 @@ export function itemCountForFloor(rng) {
   return clamp(3 + rng.nextInt(0, 4), 3, 10);
 }
 
+// 階層に応じたモンスターの強さ倍率。ATKは従来通り線形(0.06/階)のみに抑える
+// (ATKを加速させるとダメージ計算式 atk-def が一気に振り切れ、対策の余地がない
+// 即死ゲーになってしまうため)。HP/DEFは20階を超えた分だけ緩やかに加速させ、
+// 「粘り強く長引く」形で後半の緊張感を出す(即死ではなく被弾の積み重ねでの
+// 危険度上昇にする)。tier1〜tier2の境目(25階付近)は従来とほぼ同じ強さを保つ。
+export function monsterScaleForFloor(floorNumber) {
+  const over = Math.max(0, floorNumber - 20);
+  const atkScale = 1 + floorNumber * 0.06;
+  const tankScale = atkScale + over * over * 0.00015;
+  return { atkScale, tankScale };
+}
+
 export function createMonster(floorNumber, rng, id) {
   const tier = monsterTierForFloor(floorNumber);
   const def = rng.pick(tier.monsters);
-  const scale = 1 + floorNumber * 0.06;
-  const hp = Math.round(def.baseHp * scale);
+  const { atkScale, tankScale } = monsterScaleForFloor(floorNumber);
+  const hp = Math.round(def.baseHp * tankScale);
   return {
     id,
     key: def.key,
@@ -89,11 +110,26 @@ export function createMonster(floorNumber, rng, id) {
     colorClass: tier.colorClass,
     hp,
     maxHp: hp,
-    atk: Math.round(def.baseAtk * scale),
-    def: Math.round(def.baseDef * scale),
-    exp: Math.round(def.exp * scale),
+    atk: Math.round(def.baseAtk * atkScale),
+    def: Math.round(def.baseDef * tankScale),
+    exp: Math.round(def.exp * tankScale),
     pos: null,
   };
+}
+
+// 一定階層ごとに出現する精鋭個体。同tierの通常モンスターをベースに、HP/ATK/DEF/EXPを
+// 大きく底上げする。見た目は同じ漢字・tier色のままisEliteフラグとmon-eliteクラス
+// (光彩・太字)だけで格上と分かるようにし、「全て漢字1文字」の方針は崩さない。
+export function createEliteMonster(floorNumber, rng, id) {
+  const monster = createMonster(floorNumber, rng, id);
+  monster.hp = Math.round(monster.hp * ELITE_HP_MULT);
+  monster.maxHp = monster.hp;
+  monster.atk = Math.round(monster.atk * ELITE_ATK_MULT);
+  monster.def = Math.round(monster.def * ELITE_DEF_MULT);
+  monster.exp = Math.round(monster.exp * ELITE_EXP_MULT);
+  monster.isElite = true;
+  monster.colorClass = `${monster.colorClass} mon-elite`;
+  return monster;
 }
 
 export function createFinalBoss(id) {
@@ -169,7 +205,7 @@ export function createPlayer() {
     armor: null,
     ring: null,
     buffs: [],
-    inventory: { potion: 0, scroll: 0, food: 0 },
+    inventory: { potion: STARTING_POTIONS, scroll: 0, food: 0 },
     pos: null,
     kills: 0,
   };
