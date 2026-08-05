@@ -120,27 +120,9 @@ export function renderHud(dom, state, meta) {
 
 export function renderEquipment(dom, state) {
   const p = state.player;
-  if (p.weapon) {
-    dom.equipWeaponKanji.className = 'equipment-kanji item-weapon';
-    dom.equipWeaponValue.textContent = `攻撃 +${p.weapon.atkBonus}`;
-  } else {
-    dom.equipWeaponKanji.className = 'equipment-kanji';
-    dom.equipWeaponValue.textContent = 'なし';
-  }
-  if (p.armor) {
-    dom.equipArmorKanji.className = 'equipment-kanji item-armor';
-    dom.equipArmorValue.textContent = `防御 +${p.armor.defBonus}`;
-  } else {
-    dom.equipArmorKanji.className = 'equipment-kanji';
-    dom.equipArmorValue.textContent = 'なし';
-  }
-  if (p.ring) {
-    dom.equipRingKanji.className = 'equipment-kanji item-ring';
-    dom.equipRingValue.textContent = RING_LABELS[p.ring.ringEffect] || p.ring.ringEffect;
-  } else {
-    dom.equipRingKanji.className = 'equipment-kanji';
-    dom.equipRingValue.textContent = 'なし';
-  }
+  dom.equipWeaponValue.textContent = p.weapon ? `剣 +${p.weapon.atkBonus}` : 'なし';
+  dom.equipArmorValue.textContent = p.armor ? `盾 +${p.armor.defBonus}` : 'なし';
+  dom.equipRingValue.textContent = p.ring ? `輪(${RING_LABELS[p.ring.ringEffect] || p.ring.ringEffect})` : 'なし';
   dom.equipInventory.textContent = `薬×${p.inventory.potion}  巻×${p.inventory.scroll}  飯×${p.inventory.food}`;
 }
 

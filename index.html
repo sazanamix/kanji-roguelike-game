@@ -30,39 +30,10 @@
       <div class="dungeon-viewport" id="dungeon-viewport">
         <div class="dungeon-grid" id="dungeon-grid" aria-hidden="true"></div>
       </div>
-      <div class="log-row">
-        <section class="panel-block message-panel" aria-label="冒険の記録">
-          <h2>冒険の記録</h2>
-          <div class="message-log" id="message-log"></div>
-        </section>
-        <section class="panel-block equipment-panel" aria-label="装備">
-          <h2>装備</h2>
-          <div class="equipment-display">
-            <div class="equipment-slot">
-              <span id="equip-weapon-kanji" class="equipment-kanji">剣</span>
-              <span class="equipment-info">
-                <span class="equipment-label">武器</span>
-                <span id="equip-weapon-value" class="equipment-value">なし</span>
-              </span>
-            </div>
-            <div class="equipment-slot">
-              <span id="equip-armor-kanji" class="equipment-kanji">盾</span>
-              <span class="equipment-info">
-                <span class="equipment-label">防具</span>
-                <span id="equip-armor-value" class="equipment-value">なし</span>
-              </span>
-            </div>
-            <div class="equipment-slot">
-              <span id="equip-ring-kanji" class="equipment-kanji">輪</span>
-              <span class="equipment-info">
-                <span class="equipment-label">指輪</span>
-                <span id="equip-ring-value" class="equipment-value">なし</span>
-              </span>
-            </div>
-          </div>
-          <div class="equipment-inventory" id="equip-inventory-value">薬×0  巻×0  飯×0</div>
-        </section>
-      </div>
+      <section class="panel-block message-panel" aria-label="冒険の記録">
+        <h2>冒険の記録</h2>
+        <div class="message-log" id="message-log"></div>
+      </section>
     </section>
 
     <aside class="side-panel">
@@ -97,6 +68,14 @@
         <div class="stat-row"><span class="stat-label">最高到達階</span><span id="stat-best-floor" class="stat-value">0</span></div>
         <div class="stat-row"><span class="stat-label">総冒険回数</span><span id="stat-total-runs" class="stat-value">0</span></div>
         <div class="stat-row"><span class="stat-label">総クリア回数</span><span id="stat-total-clears" class="stat-value">0</span></div>
+      </section>
+
+      <section class="panel-block" aria-label="装備">
+        <h2>装備</h2>
+        <div class="stat-row"><span class="stat-label">武器</span><span id="equip-weapon-value" class="stat-value">なし</span></div>
+        <div class="stat-row"><span class="stat-label">防具</span><span id="equip-armor-value" class="stat-value">なし</span></div>
+        <div class="stat-row"><span class="stat-label">指輪</span><span id="equip-ring-value" class="stat-value">なし</span></div>
+        <div class="stat-row"><span class="stat-label">所持品</span><span id="equip-inventory-value" class="stat-value">薬×0  巻×0  飯×0</span></div>
       </section>
 
       <section class="panel-block hall-of-fame-panel" aria-label="殿堂">
