@@ -245,7 +245,13 @@ button {
 .exp-bar .bar-fill { background: var(--exp-color); }
 .hunger-bar .bar-fill { background: var(--hunger-color); }
 
-/* メッセージログ */
+/* 冒険の記録・装備(横並びで迷宮下部の幅を使い切る) */
+.log-row {
+  display: flex;
+  gap: 14px;
+  flex: 1;
+  min-height: 0;
+}
 .message-panel {
   flex: 1;
   min-height: 0;
@@ -271,59 +277,100 @@ button {
   color: var(--text);
 }
 
-/* 凡例 */
-.legend-panel {
+/* 装備パネル(冒険の記録の隣を漢字表示で埋める) */
+.equipment-panel {
   flex: 1;
   min-height: 0;
   display: flex;
   flex-direction: column;
 }
-.legend-panel summary {
-  cursor: pointer;
+.equipment-display {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+.equipment-slot {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.equipment-kanji {
+  font-size: clamp(32px, 4vw, 48px);
+  font-weight: 700;
+  width: 1.3em;
   flex-shrink: 0;
-  font: 600 12px/1 'JetBrains Mono', monospace;
-  letter-spacing: 0.1em;
+  text-align: center;
+  color: var(--text-dim);
+  opacity: 0.35;
+  transition: color 0.15s ease, opacity 0.15s ease;
+}
+.equipment-kanji.item-weapon { color: var(--item-weapon); opacity: 1; }
+.equipment-kanji.item-armor { color: var(--item-armor); opacity: 1; }
+.equipment-kanji.item-ring { color: var(--item-ring); opacity: 1; }
+.equipment-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.equipment-label {
+  font: 600 11px/1 'JetBrains Mono', monospace;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--text-dim);
-  outline: none;
 }
-.legend-list {
-  margin-top: 14px;
-  max-height: 27vh;
+.equipment-value {
+  font: 600 16px/1 'JetBrains Mono', monospace;
+  color: var(--text);
+}
+.equipment-inventory {
+  flex-shrink: 0;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+  font: 400 13px/1.4 'JetBrains Mono', monospace;
+  color: var(--text-dim);
+}
+
+/* 殿堂(過去の冒険の記録一覧) */
+.hall-of-fame-panel {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.hall-of-fame-list {
+  flex: 1;
+  min-height: 60px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 2px;
 }
-.legend-group {
+.hall-of-fame-entry {
   display: flex;
-  flex-direction: column;
-  gap: 6px;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 5px 0;
+  font: 400 12.5px/1.4 'JetBrains Mono', monospace;
+  color: var(--text-dim);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
 }
-.legend-caption {
-  margin: 0 0 2px;
-  font-size: 11px;
+.hall-of-fame-entry.is-clear {
+  color: var(--accent);
+}
+.hall-of-fame-empty {
+  font-size: 13px;
   color: var(--text-dim);
 }
-.legend-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 13px;
-}
-.legend-item span:first-child {
-  font-size: 16px;
-  min-width: 3.4em;
-  letter-spacing: 0.15em;
-  text-align: center;
-}
 
-/* 操作パネル */
+/* 操作パネル(迷宮上部のツールバー。カードと違い幅に合わせる必要はないため
+   コンパクトにまとめ、ボタン間の隙間も詰める) */
 .controls {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 10px;
+  gap: 0;
   flex-shrink: 0;
 }
 .btn {
@@ -420,6 +467,10 @@ button {
     flex: none;
     min-height: 0;
   }
+  .log-row {
+    flex-direction: column;
+    flex: none;
+  }
   .message-panel {
     flex: none;
     max-width: none;
@@ -428,10 +479,16 @@ button {
     flex: none;
     height: 220px;
   }
-  .legend-panel {
+  .equipment-panel {
     flex: none;
   }
-  .legend-list {
+  .equipment-display {
+    flex: none;
+  }
+  .hall-of-fame-panel {
+    flex: none;
+  }
+  .hall-of-fame-list {
     max-height: none;
     overflow-y: visible;
   }

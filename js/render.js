@@ -111,10 +111,6 @@ export function renderHud(dom, state, meta) {
   dom.hungerText.textContent = `${Math.ceil(p.hunger)} / ${p.maxHunger}`;
   dom.hungerBar.style.width = `${clamp((p.hunger / p.maxHunger) * 100, 0, 100)}%`;
   dom.gold.textContent = String(p.gold);
-  dom.weapon.textContent = p.weapon ? `剣 +${p.weapon.atkBonus}` : 'なし';
-  dom.armor.textContent = p.armor ? `盾 +${p.armor.defBonus}` : 'なし';
-  dom.ring.textContent = p.ring ? `輪(${RING_LABELS[p.ring.ringEffect] || p.ring.ringEffect})` : 'なし';
-  dom.inventory.textContent = `薬×${p.inventory.potion}  巻×${p.inventory.scroll}  飯×${p.inventory.food}`;
   dom.kills.textContent = String(p.kills);
 
   dom.bestFloor.textContent = String(meta.bestFloorReached);
@@ -122,10 +118,63 @@ export function renderHud(dom, state, meta) {
   dom.totalClears.textContent = String(meta.totalClears);
 }
 
+export function renderEquipment(dom, state) {
+  const p = state.player;
+  if (p.weapon) {
+    dom.equipWeaponKanji.className = 'equipment-kanji item-weapon';
+    dom.equipWeaponValue.textContent = `攻撃 +${p.weapon.atkBonus}`;
+  } else {
+    dom.equipWeaponKanji.className = 'equipment-kanji';
+    dom.equipWeaponValue.textContent = 'なし';
+  }
+  if (p.armor) {
+    dom.equipArmorKanji.className = 'equipment-kanji item-armor';
+    dom.equipArmorValue.textContent = `防御 +${p.armor.defBonus}`;
+  } else {
+    dom.equipArmorKanji.className = 'equipment-kanji';
+    dom.equipArmorValue.textContent = 'なし';
+  }
+  if (p.ring) {
+    dom.equipRingKanji.className = 'equipment-kanji item-ring';
+    dom.equipRingValue.textContent = RING_LABELS[p.ring.ringEffect] || p.ring.ringEffect;
+  } else {
+    dom.equipRingKanji.className = 'equipment-kanji';
+    dom.equipRingValue.textContent = 'なし';
+  }
+  dom.equipInventory.textContent = `薬×${p.inventory.potion}  巻×${p.inventory.scroll}  飯×${p.inventory.food}`;
+}
+
+export function renderHallOfFame(dom, meta) {
+  const container = dom.hallOfFameList;
+  container.textContent = '';
+  const entries = meta.hallOfFame || [];
+  if (entries.length === 0) {
+    const empty = document.createElement('div');
+    empty.className = 'hall-of-fame-empty';
+    empty.textContent = 'まだ記録がありません。';
+    container.appendChild(empty);
+    return;
+  }
+  const fragment = document.createDocumentFragment();
+  for (const entry of entries) {
+    const row = document.createElement('div');
+    row.className = entry.result === 'CLEAR' ? 'hall-of-fame-entry is-clear' : 'hall-of-fame-entry';
+    const left = document.createElement('span');
+    left.textContent = `${entry.floorReached}階 Lv${entry.level}`;
+    const right = document.createElement('span');
+    right.textContent = entry.result === 'CLEAR' ? '制覇' : entry.cause || '敗北';
+    row.appendChild(left);
+    row.appendChild(right);
+    fragment.appendChild(row);
+  }
+  container.appendChild(fragment);
+}
+
 export function render(renderer, state, meta) {
   renderGrid(renderer, state);
   renderMessageLog(renderer, state);
   renderHud(renderer.dom, state, meta);
+  renderEquipment(renderer.dom, state);
 }
 
 export function showOverlay(dom, { variant, title, subtitle, lines, skipLabel, onSkip }) {

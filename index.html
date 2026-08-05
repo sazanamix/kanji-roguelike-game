@@ -18,9 +18,6 @@
 
   <main class="main-layout">
     <section class="dungeon-panel">
-      <div class="dungeon-viewport" id="dungeon-viewport">
-        <div class="dungeon-grid" id="dungeon-grid" aria-hidden="true"></div>
-      </div>
       <div class="controls" id="controls">
         <button type="button" id="btn-pause" class="btn">一時停止</button>
         <button type="button" id="btn-speed" class="btn">速度 x1</button>
@@ -28,10 +25,42 @@
         <button type="button" id="btn-load" class="btn">ロード</button>
         <button type="button" id="btn-reset" class="btn btn-danger">リセット</button>
       </div>
-      <section class="panel-block message-panel" aria-label="冒険の記録">
-        <h2>冒険の記録</h2>
-        <div class="message-log" id="message-log"></div>
-      </section>
+      <div class="dungeon-viewport" id="dungeon-viewport">
+        <div class="dungeon-grid" id="dungeon-grid" aria-hidden="true"></div>
+      </div>
+      <div class="log-row">
+        <section class="panel-block message-panel" aria-label="冒険の記録">
+          <h2>冒険の記録</h2>
+          <div class="message-log" id="message-log"></div>
+        </section>
+        <section class="panel-block equipment-panel" aria-label="装備">
+          <h2>装備</h2>
+          <div class="equipment-display">
+            <div class="equipment-slot">
+              <span id="equip-weapon-kanji" class="equipment-kanji">剣</span>
+              <span class="equipment-info">
+                <span class="equipment-label">武器</span>
+                <span id="equip-weapon-value" class="equipment-value">なし</span>
+              </span>
+            </div>
+            <div class="equipment-slot">
+              <span id="equip-armor-kanji" class="equipment-kanji">盾</span>
+              <span class="equipment-info">
+                <span class="equipment-label">防具</span>
+                <span id="equip-armor-value" class="equipment-value">なし</span>
+              </span>
+            </div>
+            <div class="equipment-slot">
+              <span id="equip-ring-kanji" class="equipment-kanji">輪</span>
+              <span class="equipment-info">
+                <span class="equipment-label">指輪</span>
+                <span id="equip-ring-value" class="equipment-value">なし</span>
+              </span>
+            </div>
+          </div>
+          <div class="equipment-inventory" id="equip-inventory-value">薬×0  巻×0  飯×0</div>
+        </section>
+      </div>
     </section>
 
     <aside class="side-panel">
@@ -58,10 +87,6 @@
           <span id="stat-hunger-text" class="stat-value">100 / 100</span>
         </div>
         <div class="stat-row"><span class="stat-label">所持金</span><span id="stat-gold" class="stat-value">0</span></div>
-        <div class="stat-row"><span class="stat-label">武器</span><span id="stat-weapon" class="stat-value">なし</span></div>
-        <div class="stat-row"><span class="stat-label">防具</span><span id="stat-armor" class="stat-value">なし</span></div>
-        <div class="stat-row"><span class="stat-label">指輪</span><span id="stat-ring" class="stat-value">なし</span></div>
-        <div class="stat-row"><span class="stat-label">所持品</span><span id="stat-inventory" class="stat-value">薬×0  巻×0  飯×0</span></div>
         <div class="stat-row"><span class="stat-label">撃破数</span><span id="stat-kills" class="stat-value">0</span></div>
       </section>
 
@@ -72,36 +97,10 @@
         <div class="stat-row"><span class="stat-label">総クリア回数</span><span id="stat-total-clears" class="stat-value">0</span></div>
       </section>
 
-      <details class="panel-block legend-panel">
-        <summary>凡例(タップで開閉)</summary>
-        <div class="legend-list">
-          <div class="legend-group">
-            <div class="legend-item"><span class="tile-player">勇</span>自分</div>
-            <div class="legend-item"><span class="tile-stairs">段</span>階段(降りる)</div>
-            <div class="legend-item"><span class="tile-wall">壁</span>壁</div>
-            <div class="legend-item"><span class="tile-floor">・</span>床</div>
-          </div>
-          <div class="legend-group">
-            <p class="legend-caption">モンスター(色が濃いほど危険)</p>
-            <div class="legend-item"><span class="mon-t1">鼠 蝠 蛇 狐</span>1〜24階</div>
-            <div class="legend-item"><span class="mon-t2">狼 熊 骨 蜘</span>25〜49階</div>
-            <div class="legend-item"><span class="mon-t3">虎 鬼 妖 蠍</span>50〜74階</div>
-            <div class="legend-item"><span class="mon-t4">竜 魔 死 幽</span>75〜98階</div>
-            <div class="legend-item"><span class="mon-final">神</span>99階の守護者</div>
-          </div>
-          <div class="legend-group">
-            <p class="legend-caption">アイテム</p>
-            <div class="legend-item"><span class="item-gold">金</span>所持金</div>
-            <div class="legend-item"><span class="item-potion">薬</span>回復ポーション</div>
-            <div class="legend-item"><span class="item-food">飯</span>食料(満腹度)</div>
-            <div class="legend-item"><span class="item-scroll">巻</span>巻物(階に着くと自動使用)</div>
-            <div class="legend-item"><span class="item-weapon">剣</span>武器</div>
-            <div class="legend-item"><span class="item-armor">盾</span>防具</div>
-            <div class="legend-item"><span class="item-ring">輪</span>指輪</div>
-            <div class="legend-item"><span class="item-treasure">宝</span>レアな大金塊</div>
-          </div>
-        </div>
-      </details>
+      <section class="panel-block hall-of-fame-panel" aria-label="殿堂">
+        <h2>殿堂</h2>
+        <div class="hall-of-fame-list" id="hall-of-fame-list"></div>
+      </section>
     </aside>
   </main>
 

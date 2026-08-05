@@ -11,7 +11,7 @@ import {
 import { createRng, createMasterSeed } from './rng.js';
 import { createPlayer } from './entities.js';
 import { enterFloor, runTurn } from './turn.js';
-import { createRenderer, render, showOverlay, hideOverlay } from './render.js';
+import { createRenderer, render, renderHallOfFame, showOverlay, hideOverlay } from './render.js';
 import { saveRun, loadRun, saveMeta, loadMeta, clearAutoSave, recordRunEnd } from './save.js';
 
 function queryDom() {
@@ -31,15 +31,19 @@ function queryDom() {
     hungerBar: id('stat-hunger-bar'),
     hungerText: id('stat-hunger-text'),
     gold: id('stat-gold'),
-    weapon: id('stat-weapon'),
-    armor: id('stat-armor'),
-    ring: id('stat-ring'),
-    inventory: id('stat-inventory'),
     kills: id('stat-kills'),
     bestFloor: id('stat-best-floor'),
     totalRuns: id('stat-total-runs'),
     totalClears: id('stat-total-clears'),
     messageLog: id('message-log'),
+    equipWeaponKanji: id('equip-weapon-kanji'),
+    equipWeaponValue: id('equip-weapon-value'),
+    equipArmorKanji: id('equip-armor-kanji'),
+    equipArmorValue: id('equip-armor-value'),
+    equipRingKanji: id('equip-ring-kanji'),
+    equipRingValue: id('equip-ring-value'),
+    equipInventory: id('equip-inventory-value'),
+    hallOfFameList: id('hall-of-fame-list'),
     overlay: id('overlay'),
     overlayTitle: id('overlay-title'),
     overlaySubtitle: id('overlay-subtitle'),
@@ -210,6 +214,7 @@ function main() {
     saveMeta(meta);
     clearAutoSave();
     doRender();
+    renderHallOfFame(dom, meta);
 
     const isClear = entry.result === 'CLEAR';
     showOverlay(dom, {
@@ -278,6 +283,7 @@ function main() {
   updateSpeedButton();
   updatePauseButton();
   doRender();
+  renderHallOfFame(dom, meta);
   startInterval();
 }
 
