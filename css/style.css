@@ -156,16 +156,20 @@ button {
   padding: 12px;
   min-width: 0;
   min-height: 0;
-  container-type: inline-size;
+  /* デスクトップでは高さもステータス側のパネルに合わせて外側から決まる(内容に依存しない)ため、
+     size containment を敷いてブロック方向(cqh)の問い合わせも可能にする。
+     モバイル(下部メディアクエリ)では高さが内容依存に戻るため inline-size に戻す。 */
+  container-type: size;
 }
 .dungeon-grid {
   display: grid;
   grid-template-columns: repeat(78, 1.1em);
   grid-auto-rows: 1.2em;
   font-family: 'Noto Sans JP', monospace;
-  /* 78列(×1.1em)がビューポート幅にちょうど収まるフォントサイズを算出し、
-     画面が狭くて最小サイズを下回る場合のみビューポート側のスクロールに委ねる */
-  font-size: clamp(12px, calc(100cqw / 87), 18px);
+  /* 78列(×1.1em)が幅に、33行(×1.2em)が高さにちょうど収まる2つのフォントサイズを算出し、
+     小さい方(＝先に埋まる側の辺)を採用することで、枠の余白ができるだけ残らないようにする。
+     画面が狭くて最小サイズを下回る場合はビューポート側のスクロールに委ねる */
+  font-size: clamp(12px, min(calc(100cqw / 87), calc(100cqh / 40)), 18px);
   width: max-content;
   flex-shrink: 0;
 }
@@ -299,8 +303,8 @@ button {
 }
 .hall-of-fame-entry {
   display: flex;
-  justify-content: space-between;
-  gap: 10px;
+  align-items: baseline;
+  gap: 8px;
   padding: 5px 0;
   font: 400 12.5px/1.4 'JetBrains Mono', monospace;
   color: var(--text-dim);
@@ -308,6 +312,22 @@ button {
 }
 .hall-of-fame-entry.is-clear {
   color: var(--accent);
+}
+/* 殿堂は歴代ハイスコアの順位表のため、明示的な順位番号を左端に固定表示する */
+.hof-rank {
+  flex-shrink: 0;
+  width: 1.4em;
+  text-align: right;
+  font-weight: 600;
+  opacity: 0.75;
+}
+.hof-desc {
+  flex: 1;
+  min-width: 0;
+}
+.hof-result {
+  flex-shrink: 0;
+  text-align: right;
 }
 .hall-of-fame-empty {
   font-size: 13px;
@@ -424,6 +444,14 @@ button {
   }
   .controls {
     width: 100%;
+  }
+  .dungeon-viewport {
+    /* 縦積みでは高さがステータス側と共有されず内容依存(auto)に戻るため、
+       size containment のままだと高さ0に潰れうる。幅基準のみの containment に戻す */
+    container-type: inline-size;
+  }
+  .dungeon-grid {
+    font-size: clamp(12px, calc(100cqw / 87), 18px);
   }
   .main-layout {
     grid-template-columns: 1fr;

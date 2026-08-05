@@ -138,17 +138,23 @@ export function renderHallOfFame(dom, meta) {
     return;
   }
   const fragment = document.createDocumentFragment();
-  for (const entry of entries) {
+  entries.forEach((entry, i) => {
     const row = document.createElement('div');
     row.className = entry.result === 'CLEAR' ? 'hall-of-fame-entry is-clear' : 'hall-of-fame-entry';
-    const left = document.createElement('span');
-    left.textContent = `${entry.floorReached}階 Lv${entry.level}`;
-    const right = document.createElement('span');
-    right.textContent = entry.result === 'CLEAR' ? '制覇' : entry.cause || '敗北';
-    row.appendChild(left);
-    row.appendChild(right);
+    const rank = document.createElement('span');
+    rank.className = 'hof-rank';
+    rank.textContent = String(i + 1);
+    const desc = document.createElement('span');
+    desc.className = 'hof-desc';
+    desc.textContent = `${entry.floorReached}階 Lv${entry.level}`;
+    const result = document.createElement('span');
+    result.className = 'hof-result';
+    result.textContent = entry.result === 'CLEAR' ? '制覇' : entry.cause || '敗北';
+    row.appendChild(rank);
+    row.appendChild(desc);
+    row.appendChild(result);
     fragment.appendChild(row);
-  }
+  });
   container.appendChild(fragment);
 }
 

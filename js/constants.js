@@ -1,10 +1,12 @@
 // マップ・ダンジョン構造
 export const MAP_WIDTH = 78;
-export const MAP_HEIGHT = 24;
+// ダンジョン表示枠は横幅基準で高さが決まる(style.cssのdungeon-grid参照)ため、
+// 縦を24のままにすると枠の下部が余ってしまう。枠を無駄なく使い切る高さとして33を採用。
+export const MAP_HEIGHT = 33;
 export const SECTION_COLS = 3;
 export const SECTION_ROWS = 3;
 export const SECTION_WIDTH = MAP_WIDTH / SECTION_COLS; // 26
-export const SECTION_HEIGHT = MAP_HEIGHT / SECTION_ROWS; // 8
+export const SECTION_HEIGHT = MAP_HEIGHT / SECTION_ROWS; // 11
 
 export const MAX_FLOOR = 99;
 
@@ -33,9 +35,9 @@ export const HARD_TURN_BUDGET = 1500;
 // プレイヤーの各種しきい値
 export const HP_POTION_THRESHOLD_RATIO = 0.3;
 export const HUNGER_MAX = 100;
-// 1階の探索だけで100〜300ターン程度かかるため、1ターン=1減少では数階で餓死してしまう。
-// 満腹度100が尽きるまで約800ターン(=数階分)というゆるやかな背景プレッシャーにする。
-export const HUNGER_DRAIN_PER_TURN = 0.12;
+// マップ拡張(MAP_HEIGHT=33)により1階の探索は400ターン前後かかるため、
+// 満腹度100が尽きるまで約1700ターン(=数階分)というゆるやかな背景プレッシャーにする。
+export const HUNGER_DRAIN_PER_TURN = 0.06;
 export const HUNGER_EAT_THRESHOLD = 20;
 export const HUNGER_EAT_RESTORE = 50;
 export const HUNGER_STARVE_DAMAGE = 1;

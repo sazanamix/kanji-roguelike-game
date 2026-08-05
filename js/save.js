@@ -123,7 +123,11 @@ export function loadMeta() {
   try {
     const data = JSON.parse(raw);
     if (data.schemaVersion !== SCHEMA_VERSION) return createDefaultMeta();
-    return { ...createDefaultMeta(), ...data };
+    const meta = { ...createDefaultMeta(), ...data };
+    // 過去バージョン(直近順で保存されたもの)からの移行も含め、読み込み時に必ず
+    // ハイスコア順へ正規化しておくことで、以降どこで読んでもソート済みを前提にできる。
+    meta.hallOfFame = [...meta.hallOfFame].sort(compareEntries);
+    return meta;
   } catch (e) {
     return createDefaultMeta();
   }
@@ -133,13 +137,26 @@ export function saveMeta(meta) {
   return safeSetItem(STORAGE_KEYS.META, JSON.stringify(meta));
 }
 
-// meta.hallOfFame は直近件数でキャップされるため、bestFloorReached等は
-// 別カウンタとして持ち、ログが溢れても集計値が劣化しないようにする。
+// 殿堂は「直近の記録」ではなく「歴代ハイスコア」の順位表として扱う。
+// CLEAR済み > 到達階が深い > レベルが高い > ターン数が少ない(効率的) の順で比較し、
+// 完全に同着の場合のみ記録順(挿入順)を維持する(Array#sortは安定ソート)。
+function compareEntries(a, b) {
+  const aClear = a.result === 'CLEAR' ? 1 : 0;
+  const bClear = b.result === 'CLEAR' ? 1 : 0;
+  if (aClear !== bClear) return bClear - aClear;
+  if (b.floorReached !== a.floorReached) return b.floorReached - a.floorReached;
+  if (b.level !== a.level) return b.level - a.level;
+  return a.turnCount - b.turnCount;
+}
+
+// meta.hallOfFame は上位N件でキャップされるため、bestFloorReached等は
+// 別カウンタとして持ち、下位の記録が押し出されても集計値が劣化しないようにする。
 export function recordRunEnd(meta, entry) {
   meta.totalRunsCompleted += 1;
   if (entry.result === 'CLEAR') meta.totalClears += 1;
   meta.bestFloorReached = Math.max(meta.bestFloorReached, entry.floorReached);
-  meta.hallOfFame.unshift(entry);
+  meta.hallOfFame.push(entry);
+  meta.hallOfFame.sort(compareEntries);
   if (meta.hallOfFame.length > HALL_OF_FAME_MAX) meta.hallOfFame.length = HALL_OF_FAME_MAX;
   return meta;
 }
