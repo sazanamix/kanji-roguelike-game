@@ -138,14 +138,14 @@ export function saveMeta(meta) {
 }
 
 // 殿堂は「直近の記録」ではなく「歴代ハイスコア」の順位表として扱う。
-// CLEAR済み > 到達階が深い > レベルが高い > ターン数が少ない(効率的) の順で比較し、
-// 完全に同着の場合のみ記録順(挿入順)を維持する(Array#sortは安定ソート)。
+// CLEAR済み > 到達階が深い > ターン数が少ない(効率的) の順で比較する。
+// CLEARは全員到達階が99で並ぶため、CLEARが増えてもターン数(速攻クリアほど上位)で
+// 差がつく。完全に同着の場合のみ記録順(挿入順)を維持する(Array#sortは安定ソート)。
 function compareEntries(a, b) {
   const aClear = a.result === 'CLEAR' ? 1 : 0;
   const bClear = b.result === 'CLEAR' ? 1 : 0;
   if (aClear !== bClear) return bClear - aClear;
   if (b.floorReached !== a.floorReached) return b.floorReached - a.floorReached;
-  if (b.level !== a.level) return b.level - a.level;
   return a.turnCount - b.turnCount;
 }
 

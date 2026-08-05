@@ -126,6 +126,18 @@ export function renderEquipment(dom, state) {
   dom.equipInventory.textContent = `薬×${p.inventory.potion}  巻×${p.inventory.scroll}  飯×${p.inventory.food}`;
 }
 
+// entry.endedAt は new Date().toISOString() で保存されているため、
+// 表示用にローカル日時ベースの YYYY/MM/DD へ整形する。
+function formatEntryDate(isoString) {
+  if (!isoString) return '----/--/--';
+  const d = new Date(isoString);
+  if (Number.isNaN(d.getTime())) return '----/--/--';
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}/${m}/${day}`;
+}
+
 export function renderHallOfFame(dom, meta) {
   const container = dom.hallOfFameList;
   container.textContent = '';
@@ -141,6 +153,9 @@ export function renderHallOfFame(dom, meta) {
   entries.forEach((entry, i) => {
     const row = document.createElement('div');
     row.className = entry.result === 'CLEAR' ? 'hall-of-fame-entry is-clear' : 'hall-of-fame-entry';
+
+    const main = document.createElement('div');
+    main.className = 'hof-row-main';
     const rank = document.createElement('span');
     rank.className = 'hof-rank';
     rank.textContent = String(i + 1);
@@ -150,9 +165,23 @@ export function renderHallOfFame(dom, meta) {
     const result = document.createElement('span');
     result.className = 'hof-result';
     result.textContent = entry.result === 'CLEAR' ? '制覇' : entry.cause || '敗北';
-    row.appendChild(rank);
-    row.appendChild(desc);
-    row.appendChild(result);
+    main.appendChild(rank);
+    main.appendChild(desc);
+    main.appendChild(result);
+
+    const metaRow = document.createElement('div');
+    metaRow.className = 'hof-row-meta';
+    const date = document.createElement('span');
+    date.className = 'hof-date';
+    date.textContent = formatEntryDate(entry.endedAt);
+    const turns = document.createElement('span');
+    turns.className = 'hof-turns';
+    turns.textContent = `${(entry.turnCount || 0).toLocaleString('ja-JP')}ターン`;
+    metaRow.appendChild(date);
+    metaRow.appendChild(turns);
+
+    row.appendChild(main);
+    row.appendChild(metaRow);
     fragment.appendChild(row);
   });
   container.appendChild(fragment);

@@ -303,8 +303,8 @@ button {
 }
 .hall-of-fame-entry {
   display: flex;
-  align-items: baseline;
-  gap: 8px;
+  flex-direction: column;
+  gap: 2px;
   padding: 5px 0;
   font: 400 12.5px/1.4 'JetBrains Mono', monospace;
   color: var(--text-dim);
@@ -312,6 +312,19 @@ button {
 }
 .hall-of-fame-entry.is-clear {
   color: var(--accent);
+}
+.hof-row-main {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+/* ターン数・日付は主行の補足情報のため、一段小さく控えめに表示する */
+.hof-row-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 0.82em;
+  opacity: 0.7;
 }
 /* 殿堂は歴代ハイスコアの順位表のため、明示的な順位番号を左端に固定表示する */
 .hof-rank {
@@ -326,6 +339,13 @@ button {
   min-width: 0;
 }
 .hof-result {
+  flex-shrink: 0;
+  text-align: right;
+}
+.hof-date {
+  flex-shrink: 0;
+}
+.hof-turns {
   flex-shrink: 0;
   text-align: right;
 }
